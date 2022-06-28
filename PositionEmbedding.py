@@ -54,17 +54,18 @@ class PositionEmbedding(nn.Module):
         x = x + Variable(self.pe[:, :x.size(1)], requires_grad=False)
 
         # 最后使用一层dropout，返回结果
+
         return self.dropout(x)
 
-d_model = 512
-dropout = 0.1
-max_len = 60
-vocab = 1000
-
-embed = Embeddings(d_model, vocab)
-ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
-x = embed(ten)
-pe = PositionEmbedding(d_model, dropout, max_len)
-res = pe(x)
-print(res)
-print(res.shape)
+# d_model = 512
+# dropout = 0.1
+# max_len = 60
+# vocab = 1000
+#
+# embed = Embeddings(d_model, vocab)
+# ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
+# x = embed(ten)
+# pe = PositionEmbedding(d_model, dropout, max_len)
+# res = pe(x)
+# print(res)
+# print(res.shape)

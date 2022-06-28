@@ -19,11 +19,11 @@ class Embeddings(nn.Module):
         # 将x传给self.lut并与根号下self.d_model相乘作为结果返回
         return self.lut(x) * math.sqrt(self.d_model)
 
-# 词嵌入的维度为512
-d_model = 512
-# 词表大小定义为1000
-vocab = 1000
-
-embed = Embeddings(d_model, vocab)
-ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
-print(embed(ten))
+# # 词嵌入的维度为512
+# d_model = 512
+# # 词表大小定义为1000
+# vocab = 1000
+#
+# embed = Embeddings(d_model, vocab)
+# ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
+# print(embed(ten))
