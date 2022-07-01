@@ -1,16 +1,32 @@
-# 这是一个示例 Python 脚本。
+from Embeddings import Embeddings
+import torch
+from torch.autograd import Variable
 
-# 按 Shift+F10 执行或将其替换为您的代码。
-# 按 双击 Shift 在所有地方搜索类、文件、工具窗口、操作和设置。
+from MultiHeadedAttention import MultiHeadedAttention
+from PositionEmbedding import PositionEmbedding
+from PositionwiseFeedForward import PositionwiseEmbedding
+from TongHeadedAttention import TongHeadedAttention
 
-
-def print_hi(name):
-    # 在下面的代码行中使用断点来调试脚本。
-    print(f'Hi, {name}')  # 按 Ctrl+F8 切换断点。
-
-
-# 按间距中的绿色按钮以运行脚本。
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    head = 8
+    embedding_dim = 512
+    d_model = 512
+    d_ff = 64
+    dropout = 0.2
+    max_len = 60
+    vocab = 1000
+    embed = Embeddings(d_model, vocab)
+    ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
+    x = embed(ten)
+    pe = PositionEmbedding(d_model, dropout, max_len)
+    res = pe(x)
+    query = key = value = res
+    # print("query等输入的维度为:", query.shape)
+    mask = Variable(torch.zeros(8, 4, 4))
+    MultiAttention = MultiHeadedAttention(head, embedding_dim, dropout)
+    mha_res = MultiAttention(query, key, value, mask)
+    ff = PositionwiseEmbedding(d_model, d_ff, dropout)
+    res = ff(mha_res)
+    print(res.shape)
+    print(res)
 
-# 访问 https://www.jetbrains.com/help/pycharm/ 获取 PyCharm 帮助

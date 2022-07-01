@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import math
 from torch.autograd import Variable
-
 from Embeddings import Embeddings
 from PositionEmbedding import PositionEmbedding
 
@@ -31,22 +30,21 @@ def attention(query, key, value, mask=None, dropout=None):
         p_attn = F.dropout(p_attn)
 
     # 最后返回将p_attn与value相乘获得最终的query注意力表示，同时返回注意力张量
-    return torch.matmul(p_attn, value), p_attn, scores
+    return torch.matmul(p_attn, value), p_attn
 
 
-d_model = 512
-dropout = 0.1
-max_len = 60
-vocab = 1000
-embed = Embeddings(d_model, vocab)
-ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
-x = embed(ten)
-pe = PositionEmbedding(d_model, dropout, max_len)
-res = pe(x)
-
-query = key = value = res
-mask = Variable(torch.zeros(2, 4, 4))
-attn, p_attn, scores = attention(query, key, value, mask)
-print("attn:", attn)
-print("p_attn:", p_attn)
-print("scores:", scores)
+# d_model = 512
+# dropout = 0.1
+# max_len = 60
+# vocab = 1000
+# embed = Embeddings(d_model, vocab)
+# ten = torch.tensor([[234, 123, 543, 122], [235, 124, 789, 567]])
+# x = embed(ten)
+# pe = PositionEmbedding(d_model, dropout, max_len)
+# res = pe(x)
+#
+# query = key = value = res
+# mask = Variable(torch.zeros(2, 4, 4))
+# attn, p_attn = attention(query, key, value, mask)
+# print("attn:", attn)
+# print("p_attn:", p_attn)
