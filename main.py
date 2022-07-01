@@ -2,6 +2,7 @@ from Embeddings import Embeddings
 import torch
 from torch.autograd import Variable
 
+from LayerNorm import LayerNorm
 from MultiHeadedAttention import MultiHeadedAttention
 from PositionEmbedding import PositionEmbedding
 from PositionwiseFeedForward import PositionwiseEmbedding
@@ -27,6 +28,10 @@ if __name__ == '__main__':
     mha_res = MultiAttention(query, key, value, mask)
     ff = PositionwiseEmbedding(d_model, d_ff, dropout)
     res = ff(mha_res)
+    features = d_model = 512
+    eps = 1e-6
+    ln = LayerNorm(features, eps)
+    res = ln(res)
     print(res.shape)
     print(res)
 
