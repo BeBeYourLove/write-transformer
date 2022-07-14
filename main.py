@@ -1,3 +1,6 @@
+import copy
+
+from DecoderLayer import DecoderLayer
 from Embeddings import Embeddings
 import torch
 from torch.autograd import Variable
@@ -6,14 +9,16 @@ from EncoderLayer import EcoderLayer
 from LayerNorm import LayerNorm
 from MultiHeadedAttention import MultiHeadedAttention
 from PositionEmbedding import PositionEmbedding
-from PositionwiseFeedForward import PositionwiseEmbedding
+from PositionwiseFeedForward import PositionwiseFeedForward
 from SubLayerConnection import SubLayerConnection
 from TongHeadedAttention import TongHeadedAttention
+from Ecoder import Encoder
 
 if __name__ == '__main__':
     head = 8
     embedding_dim = 512
     d_model = 512
+    size = 512
     d_ff = 64
     dropout = 0.2
     max_len = 60
@@ -49,12 +54,36 @@ if __name__ == '__main__':
     # print(sc_res)
 
     # test EcoderLayer
-    dropout = 0.2
-    self_attn = MultiHeadedAttention(head, d_model)
-    ff = PositionwiseEmbedding(d_model, d_ff, dropout)
-    mask = Variable(torch.zeros(8, 4, 4))
+    # dropout = 0.2
+    # self_attn = MultiHeadedAttention(head, d_model)
+    # ff = PositionwiseEmbedding(d_model, d_ff, dropout)
+    # mask = Variable(torch.zeros(8, 4, 4))
+    #
+    # el = EcoderLayer(d_model, self_attn, ff, dropout)
+    # el_result = el(x, mask)
+    # print(el_result.shape)
+    # print(el_result)
 
-    el = EcoderLayer(d_model, self_attn, ff, dropout)
-    el_result = el(x, mask)
-    print(el_result.shape)
-    print(el_result)
+    """test Ecoder编码器"""
+    c = copy.deepcopy
+    attn = MultiHeadedAttention(head, d_model)
+    ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+    layer = EcoderLayer(d_model, c(attn), c(ff), dropout)
+    # 设置编码器层的个数N
+    N = 8
+    mask = Variable(torch.zeros(8, 4, 4))
+    en = Encoder(layer, N)
+    en_res = en(res, mask)
+    # print(en_res.shape)
+    # print(en_res)
+
+    """test DecoderLayer解码层"""
+    """这里测试DecoderLayer需要用到编码器"""
+    self_attn = src_attn = MultiHeadedAttention(head, d_model, dropout)
+    ff = PositionwiseFeedForward(d_model, d_ff, dropout)
+    memory = en_res
+    source_mask = target_mask = mask
+    dl = DecoderLayer(size, self_attn, src_attn, ff, dropout)
+    dl_res = dl(x, memory, source_mask, target_mask)
+    print(dl_res.shape)
+    print(dl_res)
