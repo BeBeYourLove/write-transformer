@@ -13,6 +13,7 @@ from PositionwiseFeedForward import PositionwiseFeedForward
 from SubLayerConnection import SubLayerConnection
 from TongHeadedAttention import TongHeadedAttention
 from Ecoder import Encoder
+from Decoder import Decoder
 
 if __name__ == '__main__':
     head = 8
@@ -83,7 +84,14 @@ if __name__ == '__main__':
     ff = PositionwiseFeedForward(d_model, d_ff, dropout)
     memory = en_res
     source_mask = target_mask = mask
-    dl = DecoderLayer(size, self_attn, src_attn, ff, dropout)
-    dl_res = dl(x, memory, source_mask, target_mask)
-    print(dl_res.shape)
-    print(dl_res)
+    dl = DecoderLayer(size, c(self_attn), c(src_attn), c(ff), dropout)
+    # dl_res = dl(x, memory, source_mask, target_mask)
+    # print(dl_res.shape)
+    # print(dl_res)
+
+    """test Decoder解码器"""
+    """这里需要用到解码层和编码器"""
+    de = Decoder(dl, N)
+    de_res = de(x, memory, source_mask, target_mask)
+    print(de_res.shape)
+    print(de_res)
