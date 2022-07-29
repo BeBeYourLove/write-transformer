@@ -7,7 +7,7 @@ from MultiHeadedAttention import clones
 from SubLayerConnection import SubLayerConnection
 
 
-class EcoderLayer(nn.Module):
+class EncoderLayer(nn.Module):
     def __init__(self, size, self_attn, feed_forward, dropout):
         """
         :param size: 词嵌入的维度
@@ -15,7 +15,7 @@ class EcoderLayer(nn.Module):
         :param feed_forward: 前馈全连接层的实例
         :param dropout: 网络置零比率
         """
-        super(EcoderLayer, self).__init__()
+        super(EncoderLayer, self).__init__()
 
         self.self_attn = self_attn
         self.feed_forward = feed_forward

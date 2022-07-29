@@ -3,8 +3,11 @@ import copy
 from DecoderLayer import DecoderLayer
 from Embeddings import Embeddings
 import torch
+import torch.nn as nn
 from torch.autograd import Variable
 
+from EncoderDecoder import EncoderDecoder
+from Generator import Generator
 from EncoderLayer import EcoderLayer
 from LayerNorm import LayerNorm
 from MultiHeadedAttention import MultiHeadedAttention
@@ -93,5 +96,28 @@ if __name__ == '__main__':
     """这里需要用到解码层和编码器"""
     de = Decoder(dl, N)
     de_res = de(x, memory, source_mask, target_mask)
-    print(de_res.shape)
-    print(de_res)
+    # print(de_res.shape)
+    # print(de_res)
+
+    """test Generator输出层"""
+    """这里需要用到解码器和编码器"""
+    gen = Generator(d_model, vocab)
+    gen_res = gen(de_res)
+    # print(gen_res.shape)
+    # print(gen_res)
+
+    """最后整个DecoderEncoder模型总体测试"""
+    encoder = en
+    decoder = de
+    source_embed = nn.Embedding(vocab, d_model)
+    target_embed = nn.Embedding(vocab, d_model)
+    generator = gen
+    # 假设源数据与目标数据相同，实际当中其实并不一样
+    source = target = Variable(torch.LongTensor([[100, 2, 421, 508], [491, 998, 1, 2]]))
+    # 同样实际上source_mask和target_mask也不会一样
+    source_mask = target_mask = Variable(torch.zeros(8, 4, 4))
+
+    ed = EncoderDecoder(encoder, decoder, source_embed, target_embed, generator)
+    ed_result = ed(source, target, source_mask, target_mask)
+    print(ed_result.shape)
+    print(ed_result)

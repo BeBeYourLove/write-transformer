@@ -6,6 +6,7 @@ from LayerNorm import LayerNorm
 
 # 使用类Decoder来实现解码器
 class Decoder(nn.Module):
+
     def __init__(self, layer, N):
         """
         layer代表响应的解码层
